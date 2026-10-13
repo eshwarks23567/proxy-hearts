@@ -74,7 +74,7 @@ function evidenceList(title, xs, key = "item") {
   return `<div class="card p-5 reveal"><h3 class="serif text-2xl mb-2">${title}</h3><ul class="space-y-2">${xs.map((x) => `
     <li class="reveal"><b>${esc(x[key] ?? item(x))}</b>${x.confidence ? ` <span class="text-xs text-gray-400">(${esc(x.confidence)} confidence)</span>` : ""}
     ${x.source ? `<span class="chip">${esc(x.source)}</span>` : ""}
-    ${x.evidence ? `<div class="text-sm text-gray-500 italic">“${esc(x.evidence)}”</div>` : ""}</li>`).join("")}</ul></div>`;
+    ${x.evidence ? `<div class="text-sm text-gray-500 italic">“${esc(String(x.evidence).replace(/^["“”']+|["“”']+$/g, ""))}”</div>` : ""}</li>`).join("")}</ul></div>`;
 }
 
 function personView(p) {
