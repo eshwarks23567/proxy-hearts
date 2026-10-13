@@ -139,7 +139,7 @@ def step_date(ppl):
         save(out, d)
         va, vb = d["verdicts"].get(a, {}), d["verdicts"].get(b, {})
         print(f"  {a} x {b} @ {d['venue']}: {va.get('score')}/{vb.get('score')}")
-    with ThreadPoolExecutor(3) as ex:
+    with ThreadPoolExecutor(2) as ex:  # one date per Groq model
         list(ex.map(guard(one), todo))
 
 

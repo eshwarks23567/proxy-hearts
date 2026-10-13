@@ -33,7 +33,7 @@ def providers(vision=False):
 _cool = {}  # model -> time it's usable again (from the provider's "try again in Xs")
 
 
-def chat(messages, vision=False, temperature=0.8, tries=10, timeout=55):
+def chat(messages, vision=False, temperature=0.8, tries=25, timeout=55):
     """JSON-mode chat across a provider pool. A rate-limited model cools down for exactly as long as the
     provider says; the call goes to the model that frees up first."""
     pool = providers(vision)
