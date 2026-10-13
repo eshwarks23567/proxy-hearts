@@ -71,8 +71,8 @@ function personCard(p) {
 // ------------------------------------------------------------------ profile page
 function evidenceList(title, xs, key = "item") {
   if (!xs?.length) return "";
-  return `<div class="card p-5"><h3 class="serif text-2xl mb-2">${title}</h3><ul class="space-y-2">${xs.map((x) => `
-    <li><b>${esc(x[key] ?? item(x))}</b>${x.confidence ? ` <span class="text-xs text-gray-400">(${esc(x.confidence)} confidence)</span>` : ""}
+  return `<div class="card p-5 reveal"><h3 class="serif text-2xl mb-2">${title}</h3><ul class="space-y-2">${xs.map((x) => `
+    <li class="reveal"><b>${esc(x[key] ?? item(x))}</b>${x.confidence ? ` <span class="text-xs text-gray-400">(${esc(x.confidence)} confidence)</span>` : ""}
     ${x.source ? `<span class="chip">${esc(x.source)}</span>` : ""}
     ${x.evidence ? `<div class="text-sm text-gray-500 italic">“${esc(x.evidence)}”</div>` : ""}</li>`).join("")}</ul></div>`;
 }
@@ -88,12 +88,19 @@ function personView(p) {
       <div class="text-gray-600">${esc(pr.headline)}${pr.location ? ` · ${esc(pr.location)}` : ""}</div>
       <div class="flex gap-2 mt-2 text-sm"><a class="chip" target="_blank" rel="noopener" href="${esc(p.linkedin_url)}">LinkedIn ↗</a>
       <a class="chip" target="_blank" rel="noopener" href="${esc(p.instagram_url)}">Instagram ↗</a>
-      <span class="chip">analysis confidence: ${esc(pr.overall_confidence)}</span><span class="chip">${pr.photos_read || 0} photos read</span></div>
-      <p class="mt-3 text-lg">${esc(pr.summary)}</p>
+      <span class="chip">analysis confidence: ${esc(pr.overall_confidence)}</span>
+      <button id="replay" class="chip cursor-pointer hover:bg-[#8a2846] hover:text-white">▶ Replay analysis</button></div>
+      <p class="mt-3 text-lg reveal">${esc(pr.summary)}</p>
     </div>
   </section>
 
-  <details class="card p-5 mb-6"><summary class="cursor-pointer font-semibold">How the agent read ${esc(pr.name)}: the two sources it was given</summary>
+  <div id="reading" class="card p-5 mb-6 text-sm">
+    <div class="font-semibold mb-2">🤖 ${esc(pr.name?.split(" ")[0])}'s agent is reading them</div>
+    <ol id="steps" class="space-y-1"></ol>
+    <div id="ticker" class="mt-2 text-xs text-gray-500 italic h-4 overflow-hidden"></div>
+  </div>
+
+  <details class="card p-5 mb-6 reveal"><summary class="cursor-pointer font-semibold">How the agent read ${esc(pr.name)}: the two sources it was given</summary>
     <div class="grid md:grid-cols-2 gap-4 mt-3 text-sm">
       <div><h4 class="font-semibold mb-1">Instagram @${esc(ig.username)}</h4><p class="italic text-gray-600">${esc(ig.biography)}</p>
         <p class="text-gray-500">${esc(ig.posts)} posts · ${esc(ig.followers)} followers</p>
@@ -108,12 +115,12 @@ function personView(p) {
     ${evidenceList("Hobbies", pr.hobbies)}
     ${evidenceList("Interests", pr.interests)}
     ${evidenceList("Values", pr.values)}
-    <div class="card p-5"><h3 class="serif text-2xl mb-2">Personality</h3>
+    <div class="card p-5 reveal"><h3 class="serif text-2xl mb-2">Personality</h3>
       <div>${(per.traits || []).map((t) => `<span class="chip">${esc(t)}</span>`).join("")}</div>
       <p class="text-sm mt-2"><b>Communication:</b> ${esc(per.communication_style)}</p><p class="text-sm"><b>Energy:</b> ${esc(per.energy)}</p>
       <p class="text-sm"><b>Lifestyle:</b> ${esc(pr.lifestyle)}</p><p class="text-sm"><b>Career:</b> ${esc(pr.career?.stage)}, ${esc(pr.career?.drive)}</p>
       ${pr.visual_read ? `<p class="text-sm mt-2"><b>From the photos:</b> ${esc(pr.visual_read)}</p>` : ""}</div>
-    <div class="card p-5"><h3 class="serif text-2xl mb-2">What the agent looks for</h3>
+    <div class="card p-5 reveal"><h3 class="serif text-2xl mb-2">What the agent looks for</h3>
       <p class="text-sm"><b>Green flags in a match:</b> ${(pr.green_flags_in_a_match || []).map(esc).join(" · ")}</p>
       <p class="text-sm mt-1"><b>Likely dealbreakers:</b> ${(pr.likely_dealbreakers || []).map(esc).join(" · ")}</p>
       <p class="text-sm mt-1"><b>Ideal first date:</b> ${esc(pr.ideal_first_date)}</p>
@@ -121,14 +128,46 @@ function personView(p) {
   </div>
 
   <div class="grid md:grid-cols-2 gap-4">
-    <div class="card p-5"><h3 class="serif text-2xl mb-2">Dates ${esc(pr.name?.split(" ")[0])}'s agent went on</h3>
+    <div class="card p-5 reveal"><h3 class="serif text-2xl mb-2">Dates ${esc(pr.name?.split(" ")[0])}'s agent went on</h3>
       ${myDates.map((d) => { const o = d.a === p.id ? d.b : d.a, v = d.verdicts?.[p.id] || {};
         return `<a href="#/d/${esc(dateKey(d))}" class="flex items-center gap-3 py-2 border-t border-[#f3e8eb] first:border-0 hover:bg-[#faf5f6] rounded">
           ${avatar(S.byId[o], 10)}<div class="flex-1"><b>${esc(name(o))}</b><div class="text-xs text-gray-500">${esc(d.venue)}</div></div>
           <div class="text-right"><div class="serif text-2xl text-[#8a2846]">${esc(v.score ?? "–")}</div><div class="text-xs">${v.see_again ? "wants a 2nd date" : "no 2nd date"}</div></div></a>`; }).join("") || '<p class="text-gray-500 text-sm">No dates yet.</p>'}
     </div>
-    <div class="card p-5"><h3 class="serif text-2xl mb-2">Ranking: who fits ${esc(pr.name?.split(" ")[0])} best</h3>${rankingList(p, 10)}</div>
+    <div class="card p-5 reveal"><h3 class="serif text-2xl mb-2">Ranking: who fits ${esc(pr.name?.split(" ")[0])} best</h3>${rankingList(p, 10)}</div>
   </div>`;
+  document.getElementById("replay").onclick = () => personView(p);
+  animateReading(p);
+}
+
+// The agent "reads" its person on screen, then the dossier reveals card by card, claim by claim.
+function animateReading(p) {
+  const pr = p.profile || {}, ig = p.sources?.instagram || {}, li = p.sources?.linkedin || {};
+  const here = location.hash, alive = () => location.hash === here && document.getElementById("steps");
+  const reveal = () => document.querySelectorAll(".reveal").forEach((el, i) => setTimeout(() => alive() && el.classList.add("in"), i * 90));
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return reveal();
+  const posts = ig.latestPosts || [];
+  const caps = posts.map((x) => (x.caption || x.alt || "").replace(/\s+/g, " ").slice(0, 90)).filter(Boolean);
+  const head = li.headline || li.occupation || pr.headline || "";
+  const steps = [
+    [`📸 Instagram @${ig.username || ""}: bio and ${posts.length} latest posts`, caps],
+    ["💬 Captions, hashtags, locations, photo descriptions", (posts.flatMap((x) => x.hashtags || [])).slice(0, 12).map((h) => "#" + h)],
+    [`💼 LinkedIn: ${head}`.slice(0, 110), [li.about || li.summary || ""].map((s) => String(s).slice(0, 90))],
+    ["🔗 Cross-referencing both sources: what's stated vs. inferred", []],
+    [`🧠 Writing the dossier: ${(pr.needs || []).length} needs, ${(pr.hobbies || []).length} hobbies, ${(pr.interests || []).length} interests, ${(pr.values || []).length} values`, []],
+  ];
+  const ol = document.getElementById("steps"), ticker = document.getElementById("ticker");
+  let t = 0;
+  steps.forEach(([label, flashes], i) => {
+    setTimeout(() => {
+      if (!alive()) return;
+      ol.insertAdjacentHTML("beforeend", `<li class="fade" id="st${i}">⏳ ${esc(label)}</li>`);
+      flashes.slice(0, 5).forEach((f, j) => setTimeout(() => alive() && (ticker.textContent = f ? `“${f}”` : ""), j * 160));
+    }, t);
+    t += 250 + Math.min(5, flashes.length) * 160;
+    setTimeout(() => { const el = alive() && document.getElementById(`st${i}`); if (el) el.innerHTML = `✅ ${esc(label)}`; }, t);
+  });
+  setTimeout(() => { if (alive()) { ticker.textContent = ""; reveal(); } }, t + 150);
 }
 
 function rankingList(p, n) {
