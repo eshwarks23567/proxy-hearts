@@ -105,16 +105,23 @@ def step_screen(ppl):
 
 
 def pairs(ppl):
-    """Everyone's first choice before anyone's second, so a partial run still gives every person a date."""
-    asks = {pid: (load(DATA / "screens" / f"{pid}.json") or {}).get("ask_out", []) for pid, *_ in ppl}
+    """Round 1: everyone's first choice. Round 2: a wildcard, someone screening rated a middling fit (~55), so the
+    dates test the paper scores instead of only confirming them. First choices go first so a partial run still
+    gives every person a date."""
+    screens = {pid: load(DATA / "screens" / f"{pid}.json") or {} for pid, *_ in ppl}
     seen, out = set(), []
-    for rank_i in range(max((len(a) for a in asks.values()), default=0)):
-        for pid, a in asks.items():
-            if rank_i < len(a):
-                key = tuple(sorted((pid, a[rank_i])))
-                if key not in seen:
-                    seen.add(key)
-                    out.append((pid, a[rank_i]))  # the asker opens the date
+
+    def add(a, b):
+        key = tuple(sorted((a, b)))
+        if b and key not in seen:
+            seen.add(key)
+            out.append((a, b))  # the asker opens the date
+    for pid, s in screens.items():
+        add(pid, (s.get("ask_out") or [None])[0])
+    for pid, s in screens.items():
+        cands = [x for x in s.get("scores", []) if tuple(sorted((pid, x["id"]))) not in seen]
+        if cands:
+            add(pid, min(cands, key=lambda x: abs(int(x.get("score", 0)) - 55))["id"])
     return out
 
 

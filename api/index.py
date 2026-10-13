@@ -287,7 +287,9 @@ Your move ({turn_label}). Return JSON: {{{venue_field}"say": "what {name} says o
 "private_note": "your agent's private read of the other person right now (what fits / what doesn't)",
 "fit_signal": -2..2{verdict_field}}}"""
 
-VERDICT = """, "verdict": {{"score": 0-100 how well they fit {name}, "see_again": true|false,
+VERDICT = """, "verdict": {{"score": 0-100 how well they fit {name} (be calibrated and honest: 50 = pleasant but no
+real fit, 70 = promising, 85+ = rare; judge against {name}'s needs and dealbreakers, not politeness), "see_again": true
+only if you'd genuinely book a second date for {name} - most first dates don't earn one,
 "why": "2 sentences referencing the conversation", "green_flags": [str], "red_flags": [str]}}"""
 
 
