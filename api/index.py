@@ -8,6 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler
 
 APIFY = "https://api.apify.com/v2/acts/{actor}/run-sync-get-dataset-items?token={token}&timeout=110"
+UA = "proxy-hearts/1.0 (+https://github.com/eshwarks23567/proxy-hearts)"
 IG_ACTOR = os.environ.get("IG_ACTOR", "apify~instagram-profile-scraper")
 LI_ACTOR = os.environ.get("LI_ACTOR", "supreme_coder~linkedin-profile-scraper")
 
@@ -17,13 +18,12 @@ LI_ACTOR = os.environ.get("LI_ACTOR", "supreme_coder~linkedin-profile-scraper")
 def providers(vision=False):
     """Every configured (url, key, model). Groq limits are per model, so rotating models multiplies throughput."""
     pool = []
-    if k := os.environ.get("GROQ_API_KEY"):
-        url = "https://api.groq.com/openai/v1/chat/completions"
-        models = (os.environ.get("GROQ_VISION_MODEL", "meta-llama/llama-4-scout-17b-16e-instruct"),) if vision else \
-            tuple(os.environ.get("GROQ_MODELS", "llama-3.3-70b-versatile,openai/gpt-oss-120b,meta-llama/llama-4-maverick-17b-128e-instruct").split(","))
-        pool += [(url, k, m.strip()) for m in models]
-    if k := os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY"):
-        pool.append(("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", k,
+    groq, gem = os.environ.get("GROQ_API_KEY"), os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+    if groq and not vision:  # Groq has no vision model on this account; its text models are fast
+        pool += [("https://api.groq.com/openai/v1/chat/completions", groq, m.strip())
+                 for m in os.environ.get("GROQ_MODELS", "openai/gpt-oss-120b,qwen/qwen3.8-27b,openai/gpt-oss-20b").split(",")]
+    if gem and (vision or not pool):  # Gemini reads photos; for text it's only the fallback (slow on the free tier)
+        pool.append(("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", gem,
                      os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")))
     if not pool:
         raise RuntimeError("No LLM key configured (GROQ_API_KEY or GEMINI_API_KEY)")
@@ -33,7 +33,7 @@ def providers(vision=False):
 _turn = [0]
 
 
-def chat(messages, vision=False, temperature=0.8, tries=12):
+def chat(messages, vision=False, temperature=0.8, tries=12, timeout=55):
     """JSON-mode chat with rotation across providers; waits only when every provider is rate-limited."""
     pool = providers(vision)
     last = None
@@ -43,9 +43,9 @@ def chat(messages, vision=False, temperature=0.8, tries=12):
         body = {"model": model, "messages": messages, "temperature": temperature,
                 "response_format": {"type": "json_object"}}
         req = urllib.request.Request(url, json.dumps(body).encode(), method="POST",
-                                     headers={"Content-Type": "application/json", "Authorization": f"Bearer {key}"})
+                                     headers={"Content-Type": "application/json", "Authorization": f"Bearer {key}", "User-Agent": UA})
         try:
-            with urllib.request.urlopen(req, timeout=55) as r:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
                 text = json.load(r)["choices"][0]["message"]["content"]
             return parse_json(text)
         except urllib.error.HTTPError as e:
@@ -77,7 +77,7 @@ def apify(actor, payload):
     if not token:
         raise RuntimeError("APIFY_TOKEN not configured")
     req = urllib.request.Request(APIFY.format(actor=actor, token=token), json.dumps(payload).encode(),
-                                 method="POST", headers={"Content-Type": "application/json"})
+                                 method="POST", headers={"Content-Type": "application/json", "User-Agent": UA})
     with urllib.request.urlopen(req, timeout=120) as r:
         return json.load(r)
 
@@ -101,12 +101,19 @@ def scrape_instagram(usernames):
     return {(i.get("username") or "").lower(): i for i in items if isinstance(i, dict)}
 
 
-def scrape_linkedin(urls):
-    items = apify(LI_ACTOR, {"urls": [{"url": u} for u in urls], "findContacts": False, "scrapeCompany": False})
-    out = {}
-    for u in urls:
-        slug = li_slug(u)
-        out[slug] = next((i for i in items if slug in json.dumps(i, ensure_ascii=False).lower()), None)
+def scrape_linkedin(urls, retries=2):
+    """The actor's account pool sometimes runs dry ({"error": "no available accounts found"}): retry just those."""
+    out, todo = {}, list(urls)
+    for _ in range(retries + 1):
+        if not todo:
+            break
+        items = apify(LI_ACTOR, {"urls": [{"url": u} for u in todo], "findContacts": False, "scrapeCompany": False})
+        for u in list(todo):
+            slug = li_slug(u)
+            hit = next((i for i in items if slug in json.dumps(i, ensure_ascii=False).lower() and "error" not in i), None)
+            if hit:
+                out[slug] = hit
+                todo.remove(u)
     return out
 
 
@@ -190,14 +197,15 @@ def analyze(person):
     text = json.dumps({"linkedin": li or "NOT AVAILABLE",
                        "instagram": {k: v for k, v in ig.items() if not k.startswith("_")} or "NOT AVAILABLE"},
                       ensure_ascii=False)[:14000]
-    images = [d for d in (fetch_image(u) for u in ig.get("_images", [])[:4]) if d]
+    images = [] if os.environ.get("VISION", "1") == "0" else [d for d in (fetch_image(u) for u in ig.get("_images", [])[:4]) if d]
     content = [{"type": "text", "text": ANALYZE + "\n\nSOURCES:\n" + text}]
     content += [{"type": "image_url", "image_url": {"url": d}} for d in images]
     try:
-        prof = chat([{"role": "user", "content": content}], vision=bool(images), temperature=0.4)
-    except RuntimeError:
         if not images:
-            raise
+            raise RuntimeError("no photos")
+        prof = chat([{"role": "user", "content": content}], vision=True, temperature=0.4, tries=2,
+                    timeout=int(os.environ.get("VISION_TIMEOUT", "30" if os.environ.get("VERCEL") else "90")))
+    except RuntimeError:  # no photos, or the vision model is slow/down: read the text sources only
         prof = chat([{"role": "user", "content": content[0]["text"]}], temperature=0.4)
         images = []
     prof["photos_read"] = len(images)
