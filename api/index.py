@@ -19,10 +19,10 @@ def providers(vision=False):
     """Every configured (url, key, model). Groq limits are per model, so rotating models multiplies throughput."""
     pool = []
     groq, gem = os.environ.get("GROQ_API_KEY"), os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
-    if groq and not vision:  # Groq has no vision model on this account; its text models are fast
+    if groq and not vision:  # Groq has no vision model on this account; its text models are fast (8k tokens/min each)
         pool += [("https://api.groq.com/openai/v1/chat/completions", groq, m.strip())
-                 for m in os.environ.get("GROQ_MODELS", "openai/gpt-oss-120b,qwen/qwen3.8-27b,openai/gpt-oss-20b").split(",")]
-    if gem and (vision or not pool):  # Gemini reads photos; for text it's only the fallback (slow on the free tier)
+                 for m in os.environ.get("GROQ_MODELS", "openai/gpt-oss-120b,openai/gpt-oss-20b").split(",")]
+    if gem:  # Gemini reads photos, and is an extra (slower) lane for text with a much bigger token budget
         pool.append(("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", gem,
                      os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")))
     if not pool:
@@ -30,16 +30,20 @@ def providers(vision=False):
     return pool
 
 
-_turn = [0]
+_cool = {}  # model -> time it's usable again (from the provider's "try again in Xs")
 
 
-def chat(messages, vision=False, temperature=0.8, tries=12, timeout=55):
-    """JSON-mode chat with rotation across providers; waits only when every provider is rate-limited."""
+def chat(messages, vision=False, temperature=0.8, tries=10, timeout=55):
+    """JSON-mode chat across a provider pool. A rate-limited model cools down for exactly as long as the
+    provider says; the call goes to the model that frees up first."""
     pool = providers(vision)
     last = None
-    for attempt in range(tries):
-        url, key, model = pool[_turn[0] % len(pool)]
-        _turn[0] += 1
+    for _ in range(tries):
+        url, key, model = min(pool, key=lambda p: _cool.get(p[2], 0))
+        wait = _cool.get(model, 0) - time.time()
+        if wait > 0:
+            time.sleep(min(wait, 60))
+        _cool[model] = time.time() + 1  # light spacing; other threads prefer an idle model
         body = {"model": model, "messages": messages, "temperature": temperature,
                 "response_format": {"type": "json_object"}}
         req = urllib.request.Request(url, json.dumps(body).encode(), method="POST",
@@ -49,14 +53,14 @@ def chat(messages, vision=False, temperature=0.8, tries=12, timeout=55):
                 text = json.load(r)["choices"][0]["message"]["content"]
             return parse_json(text)
         except urllib.error.HTTPError as e:
-            last = f"{model}: HTTP {e.code} {e.read()[:300]!r}"
-            if e.code not in (408, 429, 500, 502, 503, 504) and not (e.code == 400 and "json" in last.lower()):
-                if len(pool) == 1:
-                    break
-            if attempt % len(pool) == len(pool) - 1:  # went round the whole pool: back off
-                time.sleep(min(20, 3 * (attempt + 1)))
+            msg = e.read()[:400].decode(errors="replace")
+            last = f"{model}: HTTP {e.code} {msg}"
+            m = re.search(r"try again in ([\d.]+)(m?s)", msg)
+            delay = (float(m.group(1)) / (1000 if m.group(2) == "ms" else 1)) if m else (5 if e.code in (429, 500, 502, 503, 504) else 120)
+            _cool[model] = time.time() + delay + 0.5
         except (TimeoutError, urllib.error.URLError, ValueError, KeyError) as e:
             last = f"{model}: {e}"
+            _cool[model] = time.time() + 5
     raise RuntimeError(f"LLM failed: {last}")
 
 
@@ -194,9 +198,9 @@ Return JSON:
 
 def analyze(person):
     ig, li = person.get("instagram") or {}, person.get("linkedin")
-    text = json.dumps({"linkedin": li or "NOT AVAILABLE",
-                       "instagram": {k: v for k, v in ig.items() if not k.startswith("_")} or "NOT AVAILABLE"},
-                      ensure_ascii=False)[:14000]
+    # each source trimmed on its own (~3k tokens total) so neither crowds the other out
+    text = ("LINKEDIN: " + json.dumps(li or "NOT AVAILABLE", ensure_ascii=False)[:4500] + "\n\nINSTAGRAM: "
+            + json.dumps({k: v for k, v in ig.items() if not k.startswith("_")} or "NOT AVAILABLE", ensure_ascii=False)[:4500])
     images = [] if os.environ.get("VISION", "1") == "0" else [d for d in (fetch_image(u) for u in ig.get("_images", [])[:4]) if d]
     content = [{"type": "text", "text": ANALYZE + "\n\nSOURCES:\n" + text}]
     content += [{"type": "image_url", "image_url": {"url": d}} for d in images]

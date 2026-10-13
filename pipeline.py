@@ -22,6 +22,15 @@ for d in ("raw", "profiles", "screens", "dates"):
 (PUB / "img").mkdir(parents=True, exist_ok=True)
 
 
+def guard(fn):
+    def run(x):
+        try:
+            return fn(x)
+        except Exception as e:  # one failure must not stop the batch; re-running fills the gap
+            print(f"  ! {x}: {str(e)[:160]}")
+    return run
+
+
 def load(p):
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
 
@@ -74,11 +83,12 @@ def step_analyze(ppl):
         save(out, prof)
         print(f"  analyzed {pid}: {prof.get('name')} ({prof.get('photos_read')} photos)")
     with ThreadPoolExecutor(3) as ex:
-        list(ex.map(one, [p[0] for p in ppl]))
+        list(ex.map(guard(one), [p[0] for p in ppl]))
 
 
 def profiles(ppl):
-    return {p[0]: load(DATA / "profiles" / f"{p[0]}.json") for p in ppl}
+    out = {p[0]: load(DATA / "profiles" / f"{p[0]}.json") for p in ppl}
+    return {k: v for k, v in out.items() if v}  # only people the agent has read
 
 
 def step_screen(ppl):
@@ -91,13 +101,13 @@ def step_screen(ppl):
             save(out, core.screen(pid, profs[pid], cards))
             print(f"  {pid} asks out {load(out)['ask_out']}")
     with ThreadPoolExecutor(3) as ex:
-        list(ex.map(one, list(profs)))
+        list(ex.map(guard(one), list(profs)))
 
 
 def pairs(ppl):
     seen, out = set(), []
     for pid, *_ in ppl:
-        for other in load(DATA / "screens" / f"{pid}.json")["ask_out"]:
+        for other in (load(DATA / "screens" / f"{pid}.json") or {}).get("ask_out", []):
             key = tuple(sorted((pid, other)))
             if key not in seen:
                 seen.add(key)
@@ -120,7 +130,7 @@ def step_date(ppl):
         va, vb = d["verdicts"].get(a, {}), d["verdicts"].get(b, {})
         print(f"  {a} x {b} @ {d['venue']}: {va.get('score')}/{vb.get('score')}")
     with ThreadPoolExecutor(3) as ex:
-        list(ex.map(one, todo))
+        list(ex.map(guard(one), todo))
 
 
 def step_build(ppl):
@@ -129,6 +139,8 @@ def step_build(ppl):
     dates = [d for d in dates if d["a"] in profs and d["b"] in profs]
     people_out = []
     for pid, li, ig in ppl:
+        if pid not in profs or not (DATA / "screens" / f"{pid}.json").exists():
+            continue
         raw = load(DATA / "raw" / f"{pid}.json")
         igd = raw.get("instagram") or {}
         people_out.append({
