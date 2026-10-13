@@ -1,0 +1,27 @@
+# One person per line:  LinkedIn URL , Instagram URL   (Instagram must be public). Picked by the operator.
+https://www.linkedin.com/in/simonsinek , https://www.instagram.com/simonsinek
+https://www.linkedin.com/in/melrobbins , https://www.instagram.com/melrobbins
+https://www.linkedin.com/in/shettyjay , https://www.instagram.com/jayshetty
+https://www.linkedin.com/in/vanessavanedwards , https://www.instagram.com/vvanedwards
+https://www.linkedin.com/in/brenebrown , https://www.instagram.com/brenebrown
+https://www.linkedin.com/in/garyvaynerchuk , https://www.instagram.com/garyvee
+https://www.linkedin.com/in/marieforleo , https://www.instagram.com/marieforleo
+https://www.linkedin.com/in/amyporterfield , https://www.instagram.com/amyporterfield
+https://www.linkedin.com/in/codiesanchez , https://www.instagram.com/codiesanchez
+https://www.linkedin.com/in/justinwelsh , https://www.instagram.com/thejustinwelsh
+https://www.linkedin.com/in/ali-abdaal , https://www.instagram.com/aliabdaal
+https://www.linkedin.com/in/warikoo , https://www.instagram.com/ankurwarikoo
+https://www.linkedin.com/in/tanaypratap , https://www.instagram.com/tanaypratap
+https://www.linkedin.com/in/radhikagupta2 , https://www.instagram.com/iamradhikagupta
+https://www.linkedin.com/in/vanessaoglau , https://www.instagram.com/vanessalau.co
+https://www.linkedin.com/in/tanaya-narendra , https://www.instagram.com/dr_cuterus
+https://www.linkedin.com/in/alliekmiller , https://www.instagram.com/alliekmiller
+https://www.linkedin.com/in/viviantu-yourrichbff , https://www.instagram.com/your.richbff
+https://www.linkedin.com/in/kusha-kapila-5aba4545 , https://www.instagram.com/kushakapila
+https://www.linkedin.com/in/ranveerbrar , https://www.instagram.com/ranveer.brar
+https://www.linkedin.com/in/kunalshah1 , https://www.instagram.com/kunalb11
+https://www.linkedin.com/in/namita-thapar , https://www.instagram.com/namitathapar
+https://www.linkedin.com/in/jasmine-star , https://www.instagram.com/jasminestar
+https://www.linkedin.com/in/yasmin-karachiwala-13797466 , https://www.instagram.com/yasminkarachiwala
+https://www.linkedin.com/in/chriswillx , https://www.instagram.com/chriswillx
+https://www.linkedin.com/in/danielpriestley , https://www.instagram.com/danielpriestley

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proxy Hearts — agents that date for you</title>
+<meta name="description" content="Each person is represented by an AI agent that reads their LinkedIn and Instagram, then goes on dates with other agents on their behalf.">
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: Figtree, system-ui, sans-serif; background: #fbf7f4; color: #1f1a1c; }
+  .serif { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; letter-spacing: -.01em }
+  .chip { display:inline-block; padding:2px 10px; border-radius:999px; font-size:12px; background:#f4e9ec; color:#8a2846; margin:2px 4px 2px 0 }
+  .card { background:#fff; border-radius:18px; box-shadow:0 1px 2px rgba(60,20,30,.06), 0 8px 24px rgba(60,20,30,.06) }
+  .bubble-a { background:#fff; border:1px solid #f0e3e7 } .bubble-b { background:#8a2846; color:#fff }
+  .fade { animation: fade .35s ease both } @keyframes fade { from { opacity:0; transform:translateY(6px) } to { opacity:1; transform:none } }
+  .avatar { object-fit:cover; background:#efe3e6 }
+  a { color: inherit }
+</style>
+</head>
+<body>
+<header class="sticky top-0 z-10 bg-[#fbf7f4]/90 backdrop-blur border-b border-[#efe3e6]">
+  <nav class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+    <a href="#/" class="serif text-xl font-bold text-[#8a2846]">Proxy Hearts</a>
+    <div class="flex gap-4 text-sm font-medium">
+      <a href="#/" class="hover:text-[#8a2846]">People</a>
+      <a href="#/dates" class="hover:text-[#8a2846]">Dates</a>
+      <a href="#/rankings" class="hover:text-[#8a2846]">Rankings</a>
+      <a href="#/try" class="px-3 py-1 rounded-full bg-[#8a2846] text-white">Try yours</a>
+    </div>
+  </nav>
+</header>
+<main id="app" class="max-w-6xl mx-auto px-4 py-8"></main>
+<footer class="max-w-6xl mx-auto px-4 pb-10 text-xs text-gray-500">
+  Every agent knows its person only through two public sources: LinkedIn and Instagram. Agents never infer orientation,
+  religion, ethnicity, health or politics. Pasted links are processed live and kept only in your browser.
+  This is a simulation for a technical demo: the dates happen between AI agents, not the real people, and nothing here
+  is a statement about anyone's actual relationships. Want to be removed? Open an issue on the GitHub repo.
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
