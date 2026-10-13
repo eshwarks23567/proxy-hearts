@@ -205,7 +205,15 @@ function tryView() {
     <button class="px-5 py-2.5 rounded-full bg-[#8a2846] text-white font-semibold w-fit">Start my agent</button>
   </form>
   <ol id="log" class="mt-6 space-y-2 max-w-2xl"></ol>`;
-  document.getElementById("f").onsubmit = (e) => { e.preventDefault(); const f = new FormData(e.target); run(f.get("linkedin").trim(), f.get("instagram").trim()); };
+  document.getElementById("f").onsubmit = (e) => {
+    e.preventDefault();
+    // accept the two links in either box, with or without https://
+    const links = [...new FormData(e.target).values()].filter((v) => typeof v === "string" && v.trim())
+      .map((v) => (/^https?:\/\//.test(v.trim()) ? v.trim() : "https://" + v.trim().replace(/^\/+/, "")));
+    const li = links.find((u) => /linkedin\.com\/in\//i.test(u)), ig = links.find((u) => /instagram\.com\//i.test(u));
+    if (!li || !ig) { document.getElementById("log").innerHTML = `<li class="card p-3 text-sm text-red-700">❌ Please paste one LinkedIn profile link (linkedin.com/in/…) and one Instagram profile link.</li>`; return; }
+    run(li, ig);
+  };
 }
 
 async function api(op, body) {
