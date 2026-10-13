@@ -22,7 +22,7 @@ def providers(vision=False):
     if groq and not vision:  # Groq has no vision model on this account; its text models are fast (8k tokens/min each)
         pool += [("https://api.groq.com/openai/v1/chat/completions", groq, m.strip())
                  for m in os.environ.get("GROQ_MODELS", "openai/gpt-oss-120b,openai/gpt-oss-20b").split(",")]
-    if gem:  # Gemini reads photos, and is an extra (slower) lane for text with a much bigger token budget
+    if gem and (vision or not pool):  # Gemini reads photos; for text only when Groq is absent (it times out under load)
         pool.append(("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", gem,
                      os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")))
     if not pool:
