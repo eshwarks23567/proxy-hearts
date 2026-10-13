@@ -135,7 +135,8 @@ def step_date(ppl):
         out = DATA / "dates" / f"{a}__{b}.json"
         if out.exists():
             return
-        d = core.go_on_date(a, profs[a], b, profs[b])
+        past = [load(f) for f in sorted((DATA / "dates").glob("*.json"))]  # agents remember earlier dates
+        d = core.go_on_date(a, profs[a], b, profs[b], mem_a=core.memory_for(a, past), mem_b=core.memory_for(b, past))
         save(out, d)
         va, vb = d["verdicts"].get(a, {}), d["verdicts"].get(b, {})
         print(f"  {a} x {b} @ {d['venue']}: {va.get('score')}/{vb.get('score')}")
@@ -160,7 +161,8 @@ def step_build(ppl):
                         "linkedin": raw.get("linkedin")},
             "profile": profs[pid], "card": core.card(pid, profs[pid]),
             "screen": load(DATA / "screens" / f"{pid}.json"),
-            "ranking": core.rank(pid, load(DATA / "screens" / f"{pid}.json"), dates)})
+            "ranking": core.rank(pid, load(DATA / "screens" / f"{pid}.json"), dates),
+            "memory": core.memory_for(pid, dates)})
     save(PUB / "data" / "demo.json", {"people": people_out, "dates": dates})
     print(f"built public/data/demo.json: {len(people_out)} people, {len(dates)} dates")
 

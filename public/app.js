@@ -27,6 +27,7 @@ function route() {
   if (view === "dates") return datesView();
   if (view === "rankings") return rankingsView();
   if (view === "try") return tryView();
+  if (view === "agents") return agentsView();
   homeView();
 }
 
@@ -135,9 +136,38 @@ function personView(p) {
           <div class="text-right"><div class="serif text-2xl text-[#8a2846]">${esc(v.score ?? "–")}</div><div class="text-xs">${v.see_again ? "wants a 2nd date" : "no 2nd date"}</div></div></a>`; }).join("") || '<p class="text-gray-500 text-sm">No dates yet.</p>'}
     </div>
     <div class="card p-5 reveal"><h3 class="serif text-2xl mb-2">Ranking: who fits ${esc(pr.name?.split(" ")[0])} best</h3>${rankingList(p, 10)}</div>
-  </div>`;
+  </div>
+  ${memoryCard(p)}`;
   document.getElementById("replay").onclick = () => personView(p);
   animateReading(p);
+}
+
+// Persistent agent memory: one lesson per date, fed into the agent's next date.
+function memoryCard(p) {
+  const mem = p.memory || [];
+  if (!mem.length) return "";
+  return `<div class="card p-5 mt-4 reveal"><h3 class="serif text-2xl mb-1">🧠 What ${esc(p.profile?.name?.split(" ")[0])}'s agent remembers</h3>
+    <p class="text-xs text-gray-500 mb-3">After every date the agent stores a lesson. Before the next date it reads them: it leans into what worked, probes early for what didn't, and never repeats a venue.</p>
+    <div class="grid md:grid-cols-2 gap-3">${mem.map((m) => `<div class="rounded-xl bg-[#faf5f6] p-3 text-sm reveal">
+      <div class="flex items-center gap-2 mb-1">${avatar(S.byId[m.with], 8)}<b>${esc(name(m.with))}</b>
+      <span class="text-xs text-gray-500">· ${esc(m.venue)}</span><span class="ml-auto font-semibold text-[#8a2846]">${esc(m.score ?? "–")}</span></div>
+      ${(m.worked || []).length ? `<div>✅ ${m.worked.map(esc).join(" · ")}</div>` : ""}
+      ${(m.didnt || []).length ? `<div>⚠️ ${m.didnt.map(esc).join(" · ")}</div>` : ""}
+      <div class="text-xs text-gray-500 mt-1">${m.see_again ? "Would book a second date" : "Wouldn't book a second date"}</div></div>`).join("")}</div></div>`;
+}
+
+const lessonJS = (pid, d) => { // mirrors lesson() in api/index.py
+  const o = d.a === pid ? d.b : d.a, v = d.verdicts?.[pid] || {};
+  return { with: o, venue: d.venue, score: v.score, see_again: v.see_again, worked: (v.green_flags || []).slice(0, 3), didnt: (v.red_flags || []).slice(0, 3) };
+};
+
+function calendarLink(d, me) { // the agent "books" the date: a prefilled Google Calendar event, no login needed
+  const when = new Date(Date.now() + 7 * 864e5); when.setHours(19, 0, 0, 0);
+  const f = (t) => t.toISOString().replace(/[-:]|\.\d{3}/g, "");
+  const end = new Date(when.getTime() + 2 * 36e5), v = d.verdicts?.[me] || {};
+  const q = new URLSearchParams({ action: "TEMPLATE", text: `Date with ${name(d.a === me ? d.b : d.a)} (booked by your agent)`,
+    dates: `${f(when)}/${f(end)}`, location: d.venue || "", details: `Your agent's verdict: ${v.score ?? "?"}/100. ${v.why || ""}\n\nProxy Hearts` });
+  return `https://calendar.google.com/calendar/render?${q}`;
 }
 
 // The agent "reads" its person on screen, then the dossier reveals card by card, claim by claim.
@@ -232,6 +262,39 @@ function rankingsView() {
     <div class="card p-4 fade"><a href="#/p/${esc(p.id)}" class="flex items-center gap-3 mb-2">${avatar(p, 10)}<b>${esc(p.profile?.name)}</b></a>${rankingList(p, 5)}</div>`).join("")}</div>`;
 }
 
+// ------------------------------------------------------------------ under the hood
+function agentsView() {
+  const tools = [["list_people", "Everyone with a dating agent"], ["get_profile", "A dossier: needs, hobbies, interests, values, each with evidence, plus memory"],
+    ["read_person", "Scrape a LinkedIn + public Instagram and have a new agent read the person"], ["go_on_date", "Two agents date on their people's behalf: venue, transcript, private notes, verdicts"],
+    ["agent_memory", "What an agent has learned from its dates"], ["rank", "Who fits a person best"]];
+  const code = (t) => `<pre class="text-xs bg-[#1f1a1c] text-[#f4e9ec] p-3 rounded-lg overflow-auto">${esc(t)}</pre>`;
+  app.innerHTML = `<h1 class="serif text-5xl mb-2 fade">Under the hood</h1>
+  <p class="text-gray-600 mb-6 max-w-3xl">Proxy Hearts is agent infrastructure with a website on top. The same agents that dated here are available
+  to any agent runtime over MCP, they keep memory between dates, and they can put a date in your calendar.</p>
+  <div class="grid md:grid-cols-2 gap-4">
+    <div class="card p-5"><h2 class="serif text-3xl mb-1">MCP server</h2>
+      <p class="text-sm text-gray-600 mb-3">The dating agents as tools for Claude Code, Hermes, Claude Desktop or any MCP client. Plain stdio JSON-RPC, standard library only.</p>
+      <ul class="text-sm space-y-1 mb-3">${tools.map(([n, d]) => `<li><code class="chip">${n}</code> ${esc(d)}</li>`).join("")}</ul>
+      ${code("claude mcp add proxy-hearts -- python mcp_server.py")}
+      <p class="text-xs text-gray-500 mt-2 mb-1">Hermes Agent (config.yaml):</p>
+      ${code("mcp_servers:\n  proxy-hearts:\n    command: python\n    args: [\"/path/to/mcp_server.py\"]")}
+      <p class="text-xs text-gray-500 mt-2">Then just ask: “Send Mel Robbins' agent on a date with Simon Sinek's and tell me how it went.”</p></div>
+    <div class="grid gap-4">
+      <div class="card p-5"><h2 class="serif text-3xl mb-1">🧠 Persistent agent memory</h2>
+        <p class="text-sm text-gray-600">After every date an agent stores a lesson: who, where, its score, what worked and what didn't. Before its next date it reads them,
+        leaning into what worked, probing early for what didn't, never repeating a venue. In a live run your second date already uses what your agent learned on the first.
+        Open any profile to see its memory, e.g. <a class="underline" href="#/p/melrobbins">Mel Robbins</a>.</p></div>
+      <div class="card p-5"><h2 class="serif text-3xl mb-1">📅 Calendar</h2>
+        <p class="text-sm text-gray-600">When your agent comes back from a live date, it hands you a prefilled calendar event with the venue and its verdict. No login, no OAuth.</p></div>
+      <div class="card p-5"><h2 class="serif text-3xl mb-1">Stack</h2>
+        <p class="text-sm text-gray-600">Scraping: Apify (LinkedIn + Instagram). Agents: open models on Groq and OpenRouter in JSON mode, rotated on rate limits.
+        Runtime: one stdlib Python function on Vercel, the MCP server, and Hermes Agent. Safety: no inference of orientation, religion, ethnicity, health or politics;
+        consent check on live runs; nothing stored server-side.</p>
+        <a class="chip mt-2 inline-block" target="_blank" rel="noopener" href="https://github.com/eshwarks23567/proxy-hearts">GitHub ↗</a></div>
+    </div>
+  </div>`;
+}
+
 // ------------------------------------------------------------------ live run
 function tryView() {
   app.innerHTML = `<h1 class="serif text-5xl mb-2 fade">Send your agent on dates</h1>
@@ -280,13 +343,17 @@ async function run(linkedin, instagram) {
     s = step(`Screening all ${demo.length} people…`);
     const scr = await api("screen", { id, profile, cards: demo.map((p) => p.card), k: 2 });
     done(s, `Asking out: ${scr.ask_out.map((x) => `<b>${esc(name(x))}</b>`).join(" and ")}`);
-    const dates = [];
+    const dates = [], memory = [];
     for (const other of scr.ask_out) {
-      s = step(`On a date with ${esc(name(other))}…`);
-      const d = await api("date", { a_id: id, a: profile, b_id: other, b: S.byId[other].profile, rounds: 2 });
+      s = step(`On a date with ${esc(name(other))}${memory.length ? ` (the agent brings ${memory.length} memory from the last date)` : ""}…`);
+      const d = await api("date", { a_id: id, a: profile, b_id: other, b: S.byId[other].profile, rounds: 2,
+        a_memory: memory, b_memory: S.byId[other].memory || [] });
       dates.push(d);
-      done(s, `Date with <b>${esc(name(other))}</b> at ${esc(d.venue)}: ${esc(d.verdicts?.[id]?.score ?? "?")} / ${esc(d.verdicts?.[other]?.score ?? "?")}`);
+      memory.push(lessonJS(id, d));
+      done(s, `Date with <b>${esc(name(other))}</b> at ${esc(d.venue)}: ${esc(d.verdicts?.[id]?.score ?? "?")} / ${esc(d.verdicts?.[other]?.score ?? "?")}
+        · <a class="underline" target="_blank" rel="noopener" href="${esc(calendarLink(d, id))}">📅 add to calendar</a>`);
     }
+    person.memory = memory;
     person.ranking = rankJS(id, scr, dates);
     S.people = S.people.filter((p) => !p.live).concat(person);
     S.dates = S.dates.filter((d) => !String(d.a).startsWith("live-")).concat(dates);

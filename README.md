@@ -29,11 +29,25 @@ Raw sources ── slimmed: links, ids, contact data and @mentions dropped; 12 l
              people it dated (35% paper fit, 65% date), +5 when both agents want a second date (mutual).
 ```
 
+## Agent infrastructure
+- **MCP server** (`mcp_server.py`, stdlib only): `list_people`, `get_profile`, `read_person`, `go_on_date`,
+  `agent_memory`, `rank`. Any MCP client can drive the dating agents.
+  - Claude Code: `claude mcp add proxy-hearts -- python mcp_server.py`
+  - Hermes Agent (`config.yaml`): `mcp_servers: {proxy-hearts: {command: python, args: [/path/to/mcp_server.py]}}`
+    then ask Hermes: *"What has Mel Robbins' agent learned from her dates?"*
+- **Persistent agent memory**: after every date an agent stores a lesson (who, where, score, what worked, what
+  didn't). It's injected into that agent's next date, so it leans into what worked, probes for what didn't and never
+  repeats a venue. In a live run the second date already uses the first date's lesson. Shown on every profile.
+- **Calendar**: live dates come back with a prefilled Google Calendar event (venue + the agent's verdict), no OAuth.
+- **Deliberately not built**: driving real dating apps or DMs (Hinge/Tinder/Instagram) through browser automation.
+  It breaks those platforms' terms and would message real people under someone's name.
+
 ## Code
 | File | What |
 |---|---|
 | `api/index.py` | Everything: scraping, the agent prompts, screening, the date loop, ranking. Runs as one Vercel Python function (`POST /api/index?op=scrape\|analyze\|screen\|date`), stdlib only. |
 | `pipeline.py` | Batch run for the demo: `people.txt` → `public/data/demo.json`. Every step is cached to `data/` and resumable. |
+| `mcp_server.py` | The same agents over MCP (stdio JSON-RPC), with a local store for added people, dates and memory. |
 | `public/` | The site (no build step): people, profile pages, date transcripts with private notes, rankings, live "Try yours". |
 
 LLMs: Groq (`openai/gpt-oss-120b`, `qwen/qwen3.8-27b`, `openai/gpt-oss-20b`, rotated, since limits are per model)

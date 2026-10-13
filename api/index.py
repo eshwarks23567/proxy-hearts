@@ -301,10 +301,36 @@ only if you'd genuinely book a second date for {name} - most first dates don't e
 "why": "2 sentences referencing the conversation", "green_flags": [str], "red_flags": [str]}}"""
 
 
-def go_on_date(a_id, a, b_id, b, rounds=3):
-    """Two agents, each with ONLY its own person's dossier, take turns. Each gives a private verdict at the end."""
-    sys_a = AGENT.format(name=a["name"], other=b["name"], dossier=dossier(a), other_card=json.dumps(card(b_id, b), ensure_ascii=False))
-    sys_b = AGENT.format(name=b["name"], other=a["name"], dossier=dossier(b), other_card=json.dumps(card(a_id, a), ensure_ascii=False))
+# ---------------------------------------------------------------- agent memory
+
+def lesson(pid, d):
+    """What an agent keeps from one date: a compact, factual memory entry derived from its own verdict."""
+    other, v = (d["b"] if d["a"] == pid else d["a"]), d.get("verdicts", {}).get(pid, {})
+    return {"with": other, "venue": d.get("venue"), "score": v.get("score"), "see_again": v.get("see_again"),
+            "worked": (v.get("green_flags") or [])[:3], "didnt": (v.get("red_flags") or [])[:3]}
+
+
+def memory_for(pid, dates):
+    return [lesson(pid, d) for d in dates if pid in (d.get("a"), d.get("b"))]
+
+
+def memory_text(name, mem):
+    if not mem:
+        return ""
+    rows = "\n".join(f'- with {m.get("with")} at {m.get("venue")}: {m.get("score")}/100, second date: '
+                     f'{"yes" if m.get("see_again") else "no"}; worked: {", ".join(map(str, m.get("worked") or [])) or "-"}; '
+                     f'didn\'t: {", ".join(map(str, m.get("didnt") or [])) or "-"}' for m in mem[-10:])
+    return (f"\n\nYour memory from {name}'s previous dates. Use it: lean into what worked for {name}, "
+            f"probe early for what didn't, and don't repeat a venue:\n{rows}")
+
+
+def go_on_date(a_id, a, b_id, b, rounds=3, mem_a=None, mem_b=None):
+    """Two agents, each with ONLY its own person's dossier (and its own memory of past dates), take turns.
+    Each gives a private verdict at the end."""
+    sys_a = AGENT.format(name=a["name"], other=b["name"], dossier=dossier(a), other_card=json.dumps(card(b_id, b), ensure_ascii=False)) \
+        + memory_text(a["name"], mem_a)
+    sys_b = AGENT.format(name=b["name"], other=a["name"], dossier=dossier(b), other_card=json.dumps(card(a_id, a), ensure_ascii=False)) \
+        + memory_text(b["name"], mem_b)
     turns, venue, verdicts = [], "a first date", {}
     for r in range(rounds):
         for who, sys, name in ((a_id, sys_a, a["name"]), (b_id, sys_b, b["name"])):
@@ -366,7 +392,9 @@ def op_screen(q):
 
 
 def op_date(q):
-    return go_on_date(str(q["a_id"])[:80], q["a"], str(q["b_id"])[:80], q["b"], clamp(q.get("rounds", 3), 1, 3))
+    mem = lambda k: [m for m in (q.get(k) or [])[-10:] if isinstance(m, dict)]  # client-held memory, capped
+    return go_on_date(str(q["a_id"])[:80], q["a"], str(q["b_id"])[:80], q["b"], clamp(q.get("rounds", 3), 1, 3),
+                      mem("a_memory"), mem("b_memory"))
 
 
 OPS = {"scrape": op_scrape, "analyze": op_analyze, "screen": op_screen, "date": op_date}

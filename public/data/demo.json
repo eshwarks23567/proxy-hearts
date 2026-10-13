@@ -739,6 +739,32 @@
      "why": "Focus on Pilates and limited listed values provide minimal overlap with Simon's purpose‑driven needs.",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "brenebrown",
+     "venue": "A quiet corner patio at a local spot near the University of Houston campus with great coffee and plenty of space for a real talk.",
+     "score": 98,
+     "see_again": true,
+     "worked": [
+      "Values vulnerability and emotional honesty",
+      "Deeply engaged in human behavior and psychology",
+      "Optimistic and forward-looking"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "jayshetty",
+     "venue": "The NoMad Restaurant’s private dining room, New York City",
+     "score": 90,
+     "see_again": true,
+     "worked": [
+      "Values purpose and meaning in life",
+      "Engages in deep, reflective conversations",
+      "Focused on mindfulness and personal development"
+     ],
+     "didnt": []
+    }
    ]
   },
   {
@@ -1501,6 +1527,32 @@
      "score": 40,
      "why": "Tanay's deep tech and engineering focus is too far outside Mel's realm of mindset, psychology, and wellness.",
      "dated": false
+    }
+   ],
+   "memory": [
+    {
+     "with": "brenebrown",
+     "venue": "Boston Public Library courtyard café",
+     "score": 95,
+     "see_again": true,
+     "worked": [
+      "Values emotional presence and conflict resolution",
+      "Shares a passion for research and continuous learning",
+      "Deeply curious about personal development"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "marieforleo",
+     "venue": "Tatte Bakery & Café on Charles Street, Boston",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Values personal growth",
+      "Honest direct communication",
+      "Curiosity and love of learning"
+     ],
+     "didnt": []
     }
    ]
   },
@@ -2273,6 +2325,44 @@
      "score": 68,
      "why": "Entrepreneurial focus aligns with Jay's media ambitions.",
      "dated": false
+    }
+   ],
+   "memory": [
+    {
+     "with": "ariannahuff",
+     "venue": "Museum of Modern Art – Green Café (mid‑day, healthy Mediterranean menu)",
+     "score": 92,
+     "see_again": true,
+     "worked": [
+      "Values personal growth and well‑being",
+      "Comfortable with high‑profile public life",
+      "Opens up about deep conversation"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "brenebrown",
+     "venue": "Providence, a private dining room at the upscale seafood restaurant in Los Angeles",
+     "score": 90,
+     "see_again": true,
+     "worked": [
+      "empathy",
+      "vulnerability",
+      "intellectual curiosity"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "simonsinek",
+     "venue": "The NoMad Restaurant’s private dining room, New York City",
+     "score": 88,
+     "see_again": true,
+     "worked": [
+      "Purpose and meaning",
+      "Mindfulness practice",
+      "Comfort with public attention"
+     ],
+     "didnt": []
     }
    ]
   },
@@ -3080,6 +3170,32 @@
      "why": "Tanay Pratap's deep-tech and engineering focus offers little overlap with Vanessa's passion for human behavior and interpersonal communication.",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "chriswillx",
+     "venue": "The Book Café at the Austin Public Library",
+     "score": 88,
+     "see_again": true,
+     "worked": [
+      "Values deep conversation",
+      "Intellectual curiosity",
+      "Openness to vulnerability"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "brenebrown",
+     "venue": "A quiet corner of an independent bookstore cafe with great lighting and shelves of sociology books",
+     "score": 90,
+     "see_again": true,
+     "worked": [
+      "deep empathy",
+      "intellectual curiosity",
+      "vulnerability"
+     ],
+     "didnt": []
+    }
    ]
   },
   {
@@ -3739,6 +3855,68 @@
      "score": 40,
      "why": "Tanay's niche in deep tech and engineering mentorship shares very little common ground with Brené's research interests.",
      "dated": false
+    }
+   ],
+   "memory": [
+    {
+     "with": "ariannahuff",
+     "venue": "The Museum of Fine Arts Houston followed by brunch at The Juice Press",
+     "score": 90,
+     "see_again": true,
+     "worked": [
+      "Shared commitment to mental health and well-being",
+      "Mutual appreciation for deep intellectual curiosity and art",
+      "Strong alignment on rejecting burnout and honoring human connection"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "simonsinek",
+     "venue": "A quiet corner patio at a local spot near the University of Houston campus with great coffee and plenty of space for a real talk.",
+     "score": 90,
+     "see_again": true,
+     "worked": [
+      "shared commitment to vulnerability",
+      "shared interest in human behavior research",
+      "focus on compassion and collective action"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "jayshetty",
+     "venue": "Providence, a private dining room at the upscale seafood restaurant in Los Angeles",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Shared commitment to vulnerability",
+      "Mutual love of storytelling and deep conversation",
+      "Alignment on compassion and continuous learning"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "melrobbins",
+     "venue": "Boston Public Library courtyard café",
+     "score": 90,
+     "see_again": true,
+     "worked": [
+      "Shared value of continuous learning",
+      "Emphasis on authenticity and mindset growth",
+      "Appreciation for emotional presence in the messy middle"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "vvanedwards",
+     "venue": "A quiet corner of an independent bookstore cafe with great lighting and shelves of sociology books",
+     "score": 92,
+     "see_again": true,
+     "worked": [
+      "Values vulnerability and authenticity",
+      "Passionate about behavioral research and communication",
+      "Brings an empathetic and intellectually curious presence"
+     ],
+     "didnt": []
     }
    ]
   },
@@ -4520,6 +4698,37 @@
      "why": "Yasmin's fitness studio focus lacks the high-intensity digital discourse and business scale Gary needs in a partner.",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "codiesanchez",
+     "venue": "The Austin Coffee & Wine Co., 123 Main St, downtown Austin – a cozy café with premium coffee, a curated wine list, and a patio for a short walk",
+     "score": 75,
+     "see_again": true,
+     "worked": [
+      "Secured in her own massive success",
+      "Obsessed with execution and cash flow over hype",
+      "High-energy, fast-paced mindset"
+     ],
+     "didnt": [
+      "Might treat a date too much like a business networking mixer",
+      "Constant focus on scaling operations even during leisure time"
+     ]
+    },
+    {
+     "with": "marieforleo",
+     "venue": "The Modernist Pantry, 12 10th St, New York, NY – a trendy brunch spot with an excellent wine list and a relaxed coffee bar that transitions into a lively wine bar in the evenings",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Optimism and positivity",
+      "Entrepreneurial mindset",
+      "Extroverted and comfortable with public presence"
+     ],
+     "didnt": [
+      "Prefers relaxed coffee setting over high‑energy dinner"
+     ]
+    }
    ]
   },
   {
@@ -5138,6 +5347,60 @@
      "score": 60,
      "why": "Tanay's deep tech and engineering focus is a bit too niche away from Marie's creative and marketing domain.",
      "dated": false
+    }
+   ],
+   "memory": [
+    {
+     "with": "amyporterfield",
+     "venue": "A quiet, artisanal coffee shop in Nashville with great natural light and a nearby park for a quick stroll",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "shared entrepreneurial spirit",
+      "supportive of high energy ambition",
+      "interest in personal development"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "garyvee",
+     "venue": "The Modernist Pantry, 12 10th St, New York, NY – a trendy brunch spot with an excellent wine list and a relaxed coffee bar that transitions into a lively wine bar in the evenings",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "High energy and ambition",
+      "Strong focus on personal growth and mindset",
+      "Mutual enthusiasm for creative hustling"
+     ],
+     "didnt": [
+      "Potential tendency to stay in 'work mode' constantly"
+     ]
+    },
+    {
+     "with": "jasminestar",
+     "venue": "Blue Bottle Coffee on Ocean Avenue, Santa Monica – a cozy spot with a view and a nearby park for a walk",
+     "score": 78,
+     "see_again": true,
+     "worked": [
+      "supports high energy and ambition",
+      "shares curiosity and love for learning",
+      "values authenticity and personal growth"
+     ],
+     "didnt": [
+      "no mention of active/playful activities like dancing or outdoor movement"
+     ]
+    },
+    {
+     "with": "melrobbins",
+     "venue": "Tatte Bakery & Café on Charles Street, Boston",
+     "score": 90,
+     "see_again": true,
+     "worked": [
+      "Supportive of high energy and ambition",
+      "Shares curiosity and love for learning",
+      "Values authenticity and personal growth"
+     ],
+     "didnt": []
     }
    ]
   },
@@ -5926,6 +6189,20 @@
      "score": 40,
      "why": "His background is too deeply rooted in deep tech education and engineering rather than marketing and coaching.",
      "dated": false
+    }
+   ],
+   "memory": [
+    {
+     "with": "marieforleo",
+     "venue": "A quiet, artisanal coffee shop in Nashville with great natural light and a nearby park for a quick stroll",
+     "score": 92,
+     "see_again": true,
+     "worked": [
+      "Shared dedication to personal and professional growth",
+      "Values high-energy, actionable strategies",
+      "Appreciates intentional workflows and movement"
+     ],
+     "didnt": []
     }
    ]
   },
@@ -6842,6 +7119,34 @@
      "why": "Fitness‑centered profile lacks relevance to Codie's entrepreneurial lifestyle",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "garyvee",
+     "venue": "The Austin Coffee & Wine Co., 123 Main St, downtown Austin – a cozy café with premium coffee, a curated wine list, and a patio for a short walk",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Entrepreneurial ambition",
+      "Supportive of public speaking",
+      "Interest in business trends"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "danielpriestley",
+     "venue": "Covert Coffee & Cocktails downtown Austin",
+     "score": 78,
+     "see_again": true,
+     "worked": [
+      "Growth mindset",
+      "Values financial independence",
+      "Enjoys intellectual conversation"
+     ],
+     "didnt": [
+      "Potential bias toward big‑scale scaling over micro‑ventures"
+     ]
+    }
    ]
   },
   {
@@ -7722,6 +8027,20 @@
      "score": 40,
      "why": "Yasmin's deep roots in physical fitness and Pilates operations share virtually no intellectual or conversational overlap with Justin's writing.",
      "dated": false
+    }
+   ],
+   "memory": [
+    {
+     "with": "aliabdaal",
+     "venue": "A quiet café in the New York City Metropolitan Area with great coffee and a relaxed atmosphere",
+     "score": 87,
+     "see_again": true,
+     "worked": [
+      "supports ambition and growth",
+      "values open communication",
+      "shares similar work ethic"
+     ],
+     "didnt": []
     }
    ]
   },
@@ -8609,6 +8928,44 @@
      "why": "Yasmin's deep roots in physical fitness are great, but the lack of shared digital business interests creates a gap.",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "chriswillx",
+     "venue": "Gail's Bakery, King's Cross – a quiet café with great coffee and a relaxed vibe",
+     "score": 92,
+     "see_again": true,
+     "worked": [
+      "Values data and tracks experiments in spreadsheets",
+      "Shared interest in self-development and productivity",
+      "Engages in thoughtful, curious conversation"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "dr_cuterus",
+     "venue": "Theobroma Garden Café, near the Hanging Gardens, Mumbai",
+     "score": 88,
+     "see_again": true,
+     "worked": [
+      "evidence‑based decision making",
+      "love of learning",
+      "thoughtful conversation"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "thejustinwelsh",
+     "venue": "A quiet café in the New York City Metropolitan Area with great coffee and a relaxed atmosphere",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "shares a love of learning",
+      "enjoys thoughtful conversation",
+      "values evidence‑based thinking"
+     ],
+     "didnt": []
+    }
    ]
   },
   {
@@ -9435,6 +9792,20 @@
      "score": 60,
      "why": "Creative and entrepreneurial, but distinct core interests in design and marine life rather than finance/philosophy.",
      "dated": false
+    }
+   ],
+   "memory": [
+    {
+     "with": "iamradhikagupta",
+     "venue": "The Bamboo at St. Regis Gurgaon",
+     "score": 92,
+     "see_again": true,
+     "worked": [
+      "Strong financial independence and empowerment focus",
+      "Shared passion for education and writing",
+      "High ambition balanced with appreciation for life experiences"
+     ],
+     "didnt": []
     }
    ]
   },
@@ -10415,6 +10786,32 @@
      "why": "Yasmin's fitness studio background is heavily operational in physical wellness, offering minimal overlap with tech education.",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "kunalb11",
+     "venue": "Third Wave Coffee Roasters, Koramangala, Bengaluru",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Interest in AI and mentorship",
+      "Continuous learning",
+      "Supportive mindset"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "alliekmiller",
+     "venue": "A quiet specialty coffee shop in Bengaluru with great ambient light",
+     "score": 88,
+     "see_again": true,
+     "worked": [
+      "Appreciates ambition and hard work",
+      "Enjoys deep tech discussions",
+      "Independent and capable of managing her own schedule"
+     ],
+     "didnt": []
+    }
    ]
   },
   {
@@ -11252,6 +11649,47 @@
      "why": "Fitness focus does not meet her intellectual and financial criteria",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "ankurwarikoo",
+     "venue": "The Bamboo at St. Regis Gurgaon",
+     "score": 90,
+     "see_again": true,
+     "worked": [
+      "Strong intellectual curiosity",
+      "Supportive of high‑pressure career",
+      "Shared ambition"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "kunalb11",
+     "venue": "The St. Regis Lounge, Mumbai",
+     "score": 82,
+     "see_again": true,
+     "worked": [
+      "Intellectual curiosity about finance and AI",
+      "High‑profile tech leadership",
+      "Supportive and strategic mindset"
+     ],
+     "didnt": [
+      "No explicit mention of family orientation",
+      "Ambivert energy may differ from my extrovert‑leaning style"
+     ]
+    },
+    {
+     "with": "your.richbff",
+     "venue": "The Bazaar by José Andrés in Miami",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Ambition",
+      "Intellectual curiosity",
+      "Family appreciation"
+     ],
+     "didnt": []
+    }
    ]
   },
   {
@@ -12087,6 +12525,20 @@
      "score": 30,
      "why": "His culinary and food filmmaking background shares virtually no strategic or lifestyle overlap with Vanessa's world.",
      "dated": false
+    }
+   ],
+   "memory": [
+    {
+     "with": "jasminestar",
+     "venue": "A specialty boba tea lounge in Vancouver with a quiet corner for deep conversation.",
+     "score": 90,
+     "see_again": true,
+     "worked": [
+      "Shared ambition",
+      "Open communication",
+      "Strategic problem solving"
+     ],
+     "didnt": []
     }
    ]
   },
@@ -12945,6 +13397,20 @@
      "why": "Artistic focus diverges sharply from Tanaya’s evidence‑based health mission.",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "aliabdaal",
+     "venue": "Theobroma Garden Café, near the Hanging Gardens, Mumbai",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Evidence‑based discussion",
+      "Interest in health content",
+      "Collaborative mindset"
+     ],
+     "didnt": []
+    }
    ]
   },
   {
@@ -13748,6 +14214,32 @@
      "score": 20,
      "why": "Entirely focused on fitness and Pilates studios, lacking the intellectual and technological depth Allie requires.",
      "dated": false
+    }
+   ],
+   "memory": [
+    {
+     "with": "kunalb11",
+     "venue": "Blue Bottle Coffee, 1 Bryant Park, Manhattan",
+     "score": 94,
+     "see_again": true,
+     "worked": [
+      "Shared enthusiasm for AI and fintech",
+      "Ambition and strategic thinking",
+      "Open to deep, technical conversations"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "tanaypratap",
+     "venue": "A quiet specialty coffee shop in Bengaluru with great ambient light",
+     "score": 92,
+     "see_again": true,
+     "worked": [
+      "Shared passion for education and tech mentorship",
+      "Systematic and structured approach to team leadership",
+      "High intellectual engagement around AI disruption"
+     ],
+     "didnt": []
     }
    ]
   },
@@ -14693,6 +15185,20 @@
      "why": "Yasmin's fitness studio empire is impressive, but her niche and lifestyle lack the digital-media and financial focus Vivian is immersed in.",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "iamradhikagupta",
+     "venue": "The Bazaar by José Andrés in Miami",
+     "score": 88,
+     "see_again": true,
+     "worked": [
+      "Ambitious",
+      "Financially literate",
+      "Humorous banter"
+     ],
+     "didnt": []
+    }
    ]
   },
   {
@@ -15492,6 +15998,22 @@
      "why": "Deep tech and engineering education are completely misaligned with her fashion and media background.",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "ranveer.brar",
+     "venue": "National Museum of Modern Art, Delhi – the contemporary Indian art exhibition followed by coffee at the museum’s art‑café",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Appreciates arts",
+      "Expressive conversation",
+      "Supportive of creative career"
+     ],
+     "didnt": [
+      "Potential itinerant lifestyle concerns"
+     ]
+    }
    ]
   },
   {
@@ -16256,6 +16778,34 @@
      "score": 40,
      "why": "Finance focus but no culinary.",
      "dated": false
+    }
+   ],
+   "memory": [
+    {
+     "with": "kushakapila",
+     "venue": "National Museum of Modern Art, Delhi – the contemporary Indian art exhibition followed by coffee at the museum’s art‑café",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Creative synergy with culinary storytelling",
+      "Adventure mindset and willingness to travel",
+      "Interest in culinary experimentation"
+     ],
+     "didnt": [
+      "Unclear how she will accommodate a demanding travel schedule"
+     ]
+    },
+    {
+     "with": "jasminestar",
+     "venue": "Savour & Sip Culinary Studio for a hands‑on cooking workshop",
+     "score": 82,
+     "see_again": true,
+     "worked": [
+      "Supports creative pursuits",
+      "Enjoys cultural and travel experiences",
+      "Values mentorship and learning"
+     ],
+     "didnt": []
     }
    ]
   },
@@ -17107,6 +17657,47 @@
      "why": "Fitness focus, not aligned.",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "alliekmiller",
+     "venue": "Blue Bottle Coffee, 1 Bryant Park, Manhattan",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Shared AI and fintech focus",
+      "Enjoys deep, idea‑focused discussions",
+      "Values continuous learning and ambition"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "iamradhikagupta",
+     "venue": "The St. Regis Lounge, Mumbai",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Shared interest in fintech and AI",
+      "Ambitious, growth‑oriented mindset",
+      "Enjoys deep, intellectual conversations"
+     ],
+     "didnt": [
+      "More extroverted energy than my ambivert leaning (minor)",
+      "No explicit mention of personal growth beyond professional"
+     ]
+    },
+    {
+     "with": "tanaypratap",
+     "venue": "Third Wave Coffee Roasters, Koramangala, Bengaluru",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "AI interest",
+      "ambitious founder",
+      "values mentorship"
+     ],
+     "didnt": []
+    }
    ]
   },
   {
@@ -17748,6 +18339,23 @@
      "why": "Art and fashion oriented with no health or outdoor relevance",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "ariannahuff",
+     "venue": "Sukoon, Pune (a rooftop café known for its organic brunch and panoramic city view)",
+     "score": 78,
+     "see_again": true,
+     "worked": [
+      "wellness focus",
+      "tech‑free bedtime",
+      "extrovert energy"
+     ],
+     "didnt": [
+      "limited mention of outdoor activities",
+      "focus on AI rather than nature"
+     ]
+    }
    ]
   },
   {
@@ -18358,6 +18966,46 @@
      "score": 55,
      "why": "Tanay's deep tech education focus is too far removed from Jasmine's branding, marketing, and business strategy universe.",
      "dated": false
+    }
+   ],
+   "memory": [
+    {
+     "with": "marieforleo",
+     "venue": "Blue Bottle Coffee on Ocean Avenue, Santa Monica – a cozy spot with a view and a nearby park for a walk",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Shared passion for entrepreneurship",
+      "Commitment to continuous learning",
+      "High energy and drive"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "ranveer.brar",
+     "venue": "Savour & Sip Culinary Studio for a hands‑on cooking workshop",
+     "score": 88,
+     "see_again": true,
+     "worked": [
+      "Continuous learning",
+      "Creative storytelling",
+      "Supportive mentorship"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "vanessalau.co",
+     "venue": "A specialty boba tea lounge in Vancouver with a quiet corner for deep conversation.",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Appreciates ambition and hard work",
+      "Committed to personal growth and self‑improvement",
+      "Comfortable with direct, passionate communication"
+     ],
+     "didnt": [
+      "None evident from conversation"
+     ]
     }
    ]
   },
@@ -19047,6 +19695,20 @@
      "why": "Creative content background offers little overlap with wellness or entrepreneurial schedule.",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "blogilates",
+     "venue": "The National Aquarium in Baltimore, Maryland",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Shared Pilates passion",
+      "Entrepreneurial spirit",
+      "Community orientation"
+     ],
+     "didnt": []
+    }
    ]
   },
   {
@@ -19715,6 +20377,32 @@
      "score": 40,
      "why": "Tanay's heavy focus on engineering and ed-tech systems is too far removed from Chris's domain of psychology and philosophy.",
      "dated": false
+    }
+   ],
+   "memory": [
+    {
+     "with": "aliabdaal",
+     "venue": "Gail's Bakery, King's Cross – a quiet café with great coffee and a relaxed vibe",
+     "score": 88,
+     "see_again": true,
+     "worked": [
+      "evidence‑based mindset",
+      "open communication",
+      "shared productivity interest"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "vvanedwards",
+     "venue": "The Book Café at the Austin Public Library",
+     "score": 90,
+     "see_again": true,
+     "worked": [
+      "shared curiosity",
+      "empathy",
+      "vulnerability"
+     ],
+     "didnt": []
     }
    ]
   },
@@ -20585,6 +21273,22 @@
      "why": "Focused entirely on physical fitness studios and wellness infrastructure, lacking the intellectual business banter Daniel requires.",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "codiesanchez",
+     "venue": "Covert Coffee & Cocktails downtown Austin",
+     "score": 75,
+     "see_again": true,
+     "worked": [
+      "High ambition",
+      "Intellectual stimulation",
+      "Fast‑paced, energetic"
+     ],
+     "didnt": [
+      "Possible misalignment on scale strategy (small vs. large)"
+     ]
+    }
    ]
   },
   {
@@ -21253,6 +21957,22 @@
      "why": "Tanay's deep tech and engineering background shares very little common ground with Joe's health and fitness empire.",
      "dated": false
     }
+   ],
+   "memory": [
+    {
+     "with": "blogilates",
+     "venue": "Morning walk along the Thames River promenade, followed by brunch at a local plant‑based café",
+     "score": 88,
+     "see_again": true,
+     "worked": [
+      "Active lifestyle",
+      "Community‑oriented",
+      "Entrepreneurial support"
+     ],
+     "didnt": [
+      "Potential schedule clash"
+     ]
+    }
    ]
   },
   {
@@ -21877,6 +22597,32 @@
      "score": 25,
      "why": "His deep-tech and engineering background has virtually no common ground with Cassey's fashion, fitness, and lifestyle brands.",
      "dated": false
+    }
+   ],
+   "memory": [
+    {
+     "with": "thebodycoach",
+     "venue": "Morning walk along the Thames River promenade, followed by brunch at a local plant‑based café",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Shared entrepreneurial drive",
+      "Community building",
+      "Active lifestyle"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "yasminkarachiwala",
+     "venue": "The National Aquarium in Baltimore, Maryland",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Strong community builder",
+      "Entrepreneurial spirit",
+      "Passion for movement and ocean"
+     ],
+     "didnt": []
     }
    ]
   },
@@ -22549,6 +23295,44 @@
      "score": 45,
      "why": "Gary's relentless hustle culture directly clashes with her core mission of rest and thriving.",
      "dated": false
+    }
+   ],
+   "memory": [
+    {
+     "with": "jayshetty",
+     "venue": "Museum of Modern Art – Green Café (mid‑day, healthy Mediterranean menu)",
+     "score": 85,
+     "see_again": true,
+     "worked": [
+      "Prioritizes mental health and sleep",
+      "Curious about the intersection of technology and humanity",
+      "Values purpose and deep human connection"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "brenebrown",
+     "venue": "The Museum of Fine Arts Houston followed by brunch at The Juice Press",
+     "score": 95,
+     "see_again": true,
+     "worked": [
+      "Deeply values mental health and resists burnout culture",
+      "Intellectually curious with a focus on human connection",
+      "Shared appreciation for cultural events and museums"
+     ],
+     "didnt": []
+    },
+    {
+     "with": "namitathapar",
+     "venue": "Sukoon, Pune (a rooftop café known for its organic brunch and panoramic city view)",
+     "score": 90,
+     "see_again": true,
+     "worked": [
+      "Prioritizes sleep and health advocacy",
+      "Engaging and intellectually stimulating conversation",
+      "Appreciation for nature and active living"
+     ],
+     "didnt": []
     }
    ]
   }
