@@ -225,9 +225,17 @@ def card(pid, p):
 
 
 def dossier(p):
-    keep = ("name", "headline", "location", "summary", "needs", "hobbies", "interests", "values", "personality",
-            "lifestyle", "career", "green_flags_in_a_match", "likely_dealbreakers", "ideal_first_date", "conversation_starters")
-    return json.dumps({k: p.get(k) for k in keep}, ensure_ascii=False)
+    """What the agent carries into screening and dates: the substance of the profile, without the evidence quotes
+    (those stay on the profile page) -- about half the tokens, which matters on free-tier rate limits."""
+    items = lambda xs, key="item": [x.get(key) if isinstance(x, dict) else x for x in (xs or [])]
+    per = p.get("personality") or {}
+    return json.dumps({
+        "name": p.get("name"), "headline": p.get("headline"), "location": p.get("location"), "summary": p.get("summary"),
+        "needs": items(p.get("needs"), "need"), "hobbies": items(p.get("hobbies")), "interests": items(p.get("interests")),
+        "values": items(p.get("values")), "traits": per.get("traits"), "communication_style": per.get("communication_style"),
+        "energy": per.get("energy"), "lifestyle": p.get("lifestyle"), "career": p.get("career"),
+        "green_flags_in_a_match": p.get("green_flags_in_a_match"), "likely_dealbreakers": p.get("likely_dealbreakers"),
+        "ideal_first_date": p.get("ideal_first_date"), "conversation_starters": p.get("conversation_starters")}, ensure_ascii=False)
 
 
 # ---------------------------------------------------------------- screening: who does my agent ask out?
@@ -246,8 +254,12 @@ CARDS:
 
 def screen(pid, prof, cards, k=2):
     others = [c for c in cards if c["id"] != pid]
+    # compact cards: 28 full cards would blow a free-tier token budget; this keeps the signal
+    brief = [{"id": c["id"], "name": c.get("name"), "headline": (c.get("headline") or "")[:90],
+              "hobbies": c.get("hobbies", [])[:3], "interests": c.get("interests", [])[:3],
+              "values": c.get("values", [])[:2], "energy": c.get("energy")} for c in others]
     out = chat([{"role": "user", "content": SCREEN.format(name=prof.get("name"), dossier=dossier(prof), k=k,
-                                                          cards=json.dumps(others, ensure_ascii=False))}], temperature=0.3)
+                                                          cards=json.dumps(brief, ensure_ascii=False))}], temperature=0.3)
     valid = {c["id"] for c in others}
     out["scores"] = [s for s in out.get("scores", []) if s.get("id") in valid]
     out["ask_out"] = [i for i in out.get("ask_out", []) if i in valid][:k] or \

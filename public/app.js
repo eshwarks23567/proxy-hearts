@@ -236,7 +236,7 @@ async function run(linkedin, instagram) {
     const dates = [];
     for (const other of scr.ask_out) {
       s = step(`On a date with ${esc(name(other))}…`);
-      const d = await api("date", { a_id: id, a: profile, b_id: other, b: S.byId[other].profile, rounds: 3 });
+      const d = await api("date", { a_id: id, a: profile, b_id: other, b: S.byId[other].profile, rounds: 2 });
       dates.push(d);
       done(s, `Date with <b>${esc(name(other))}</b> at ${esc(d.venue)}: ${d.verdicts?.[id]?.score ?? "?"} / ${d.verdicts?.[other]?.score ?? "?"}`);
     }

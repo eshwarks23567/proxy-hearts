@@ -105,13 +105,16 @@ def step_screen(ppl):
 
 
 def pairs(ppl):
+    """Everyone's first choice before anyone's second, so a partial run still gives every person a date."""
+    asks = {pid: (load(DATA / "screens" / f"{pid}.json") or {}).get("ask_out", []) for pid, *_ in ppl}
     seen, out = set(), []
-    for pid, *_ in ppl:
-        for other in (load(DATA / "screens" / f"{pid}.json") or {}).get("ask_out", []):
-            key = tuple(sorted((pid, other)))
-            if key not in seen:
-                seen.add(key)
-                out.append((pid, other))  # the asker opens the date
+    for rank_i in range(max((len(a) for a in asks.values()), default=0)):
+        for pid, a in asks.items():
+            if rank_i < len(a):
+                key = tuple(sorted((pid, a[rank_i])))
+                if key not in seen:
+                    seen.add(key)
+                    out.append((pid, a[rank_i]))  # the asker opens the date
     return out
 
 
