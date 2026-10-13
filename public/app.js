@@ -13,7 +13,7 @@ const dateKey = (d) => `${d.a}__${d.b}`;
 function index() { S.byId = Object.fromEntries(S.people.map((p) => [p.id, p])); }
 
 async function boot() {
-  try { const r = await fetch("data/demo.json"); Object.assign(S, await r.json()); } catch { /* no demo yet */ }
+  try { const r = await fetch("data/demo.json", { cache: "no-store" }); Object.assign(S, await r.json()); } catch { /* no demo yet */ }
   try { const live = JSON.parse(localStorage.getItem("ph-live") || "null"); if (live) { S.people.push(live.person); S.dates.push(...live.dates); } } catch {}
   index(); route();
 }
