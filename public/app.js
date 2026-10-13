@@ -174,7 +174,7 @@ function calendarLink(d, me) { // the agent "books" the date: a prefilled Google
 function animateReading(p) {
   const pr = p.profile || {}, ig = p.sources?.instagram || {}, li = p.sources?.linkedin || {};
   const here = location.hash, alive = () => location.hash === here && document.getElementById("steps");
-  const reveal = () => document.querySelectorAll(".reveal").forEach((el, i) => setTimeout(() => alive() && el.classList.add("in"), i * 90));
+  const reveal = () => document.querySelectorAll(".reveal").forEach((el, i) => setTimeout(() => alive() && el.classList.add("in"), Math.min(i * 60, 1500)));
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return reveal();
   const posts = ig.latestPosts || [];
   const caps = posts.map((x) => (x.caption || x.alt || "").replace(/\s+/g, " ").slice(0, 90)).filter(Boolean);
