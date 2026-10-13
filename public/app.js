@@ -285,7 +285,7 @@ async function run(linkedin, instagram) {
       s = step(`On a date with ${esc(name(other))}…`);
       const d = await api("date", { a_id: id, a: profile, b_id: other, b: S.byId[other].profile, rounds: 2 });
       dates.push(d);
-      done(s, `Date with <b>${esc(name(other))}</b> at ${esc(d.venue)}: ${d.verdicts?.[id]?.score ?? "?"} / ${d.verdicts?.[other]?.score ?? "?"}`);
+      done(s, `Date with <b>${esc(name(other))}</b> at ${esc(d.venue)}: ${esc(d.verdicts?.[id]?.score ?? "?")} / ${esc(d.verdicts?.[other]?.score ?? "?")}`);
     }
     person.ranking = rankJS(id, scr, dates);
     S.people = S.people.filter((p) => !p.live).concat(person);

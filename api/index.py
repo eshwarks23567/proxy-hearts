@@ -7,7 +7,7 @@ import base64, json, os, re, time, urllib.error, urllib.parse, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler
 
-APIFY = "https://api.apify.com/v2/acts/{actor}/run-sync-get-dataset-items?token={token}&timeout=110"
+APIFY = "https://api.apify.com/v2/acts/{actor}/run-sync-get-dataset-items?timeout=110"  # token goes in a header, never the URL
 UA = "proxy-hearts/1.0 (+https://github.com/eshwarks23567/proxy-hearts)"
 IG_ACTOR = os.environ.get("IG_ACTOR", "apify~instagram-profile-scraper")
 LI_ACTOR = os.environ.get("LI_ACTOR", "supreme_coder~linkedin-profile-scraper")
@@ -83,8 +83,8 @@ def apify(actor, payload):
     token = os.environ.get("APIFY_TOKEN")
     if not token:
         raise RuntimeError("APIFY_TOKEN not configured")
-    req = urllib.request.Request(APIFY.format(actor=actor, token=token), json.dumps(payload).encode(),
-                                 method="POST", headers={"Content-Type": "application/json", "User-Agent": UA})
+    req = urllib.request.Request(APIFY.format(actor=actor), json.dumps(payload).encode(), method="POST",
+                                 headers={"Content-Type": "application/json", "User-Agent": UA, "Authorization": f"Bearer {token}"})
     with urllib.request.urlopen(req, timeout=120) as r:
         return json.load(r)
 
@@ -152,7 +152,12 @@ def slim(obj, depth=0):
     return obj
 
 
+IMG_HOSTS = re.compile(r"^https://[a-z0-9.-]+\.(cdninstagram\.com|fbcdn\.net)/", re.I)
+
+
 def fetch_image(url):
+    if not IMG_HOSTS.match(str(url)):  # only Instagram's CDN: the URL comes from request data (no SSRF)
+        return None
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urllib.request.urlopen(req, timeout=15) as r:
@@ -344,6 +349,10 @@ def rank(pid, screen_out, dates):
 
 # ---------------------------------------------------------------- HTTP (Vercel)
 
+def clamp(v, lo, hi):
+    return max(lo, min(hi, int(v)))  # public endpoint: cap anything that multiplies cost
+
+
 def op_scrape(q):
     return scrape_person(q["linkedin"], q["instagram"])
 
@@ -353,11 +362,11 @@ def op_analyze(q):
 
 
 def op_screen(q):
-    return screen(q["id"], q["profile"], q["cards"], int(q.get("k", 2)))
+    return screen(str(q["id"])[:80], q["profile"], list(q["cards"])[:60], clamp(q.get("k", 2), 1, 3))
 
 
 def op_date(q):
-    return go_on_date(q["a_id"], q["a"], q["b_id"], q["b"], int(q.get("rounds", 3)))
+    return go_on_date(str(q["a_id"])[:80], q["a"], str(q["b_id"])[:80], q["b"], clamp(q.get("rounds", 3), 1, 3))
 
 
 OPS = {"scrape": op_scrape, "analyze": op_analyze, "screen": op_screen, "date": op_date}
@@ -378,7 +387,12 @@ class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         op = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query).get("op", [""])[0]
         try:
-            q = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))) or b"{}")
+            n = int(self.headers.get("Content-Length", 0))
+            if n > 400_000:
+                return self._send(413, {"error": "request too large"})
+            q = json.loads(self.rfile.read(n) or b"{}")
+            if not isinstance(q, dict):
+                raise ValueError("JSON object expected")
             if op not in OPS:
                 return self._send(404, {"error": f"unknown op {op!r}"})
             self._send(200, OPS[op](q))
