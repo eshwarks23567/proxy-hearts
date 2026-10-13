@@ -50,8 +50,10 @@ Raw sources ── slimmed: links, ids, contact data and @mentions dropped; 12 l
 | `mcp_server.py` | The same agents over MCP (stdio JSON-RPC), with a local store for added people, dates and memory. |
 | `public/` | The site (no build step): people, profile pages, date transcripts with private notes, rankings, live "Try yours". |
 
-LLMs: Groq (`openai/gpt-oss-120b`, `qwen/qwen3.8-27b`, `openai/gpt-oss-20b`, rotated, since limits are per model)
-with Gemini as the fallback. Everything goes through the OpenAI-compatible chat API in JSON mode.
+LLMs: Groq (`openai/gpt-oss-120b`, `openai/gpt-oss-20b`, rotated, since limits are per model), plus any
+OpenAI-compatible provider via `EXTRA_LLM_URL/KEY/MODELS` (the live site uses OpenRouter's free Nemotron 120B when
+Groq's daily cap is hit), Gemini for photos. All in JSON mode; a rate-limited model cools down for exactly as long
+as the provider says.
 
 ## Run it
 ```
